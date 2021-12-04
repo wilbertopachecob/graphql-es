@@ -4,17 +4,24 @@ import { ApolloServer } from "apollo-server-express";
 import { schema } from './graphql/index';
 
 const app = express();
-app.use(cors);
+const port = 5000;
+app.use(cors());
 
-const server = new ApolloServer({
-    schema,
-    // playground: true,
-    introspection: true
-});
+async function startApolloServer() {
+    const server = new ApolloServer({
+        schema,
+        // playground: true,
+        introspection: true
+    });
 
-server.applyMiddleware({app})
+    await server.start();
 
-app.listen(5000, () => {
-    console.log('Server running in port 5000');
+    server.applyMiddleware({app})        ;
+}
+
+startApolloServer();
+
+app.listen(port, () => {
+    console.log(`App listening at http://localhost:${port}`);
 });
 
