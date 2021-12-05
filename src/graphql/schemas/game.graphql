@@ -1,8 +1,8 @@
 type Query {
-  gameHello: String
+  getGames: [Game]
 }
 
 type Game {
   _id: ID
-  name: String
+  title: String
 }
