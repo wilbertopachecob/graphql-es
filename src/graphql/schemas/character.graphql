@@ -1,5 +1,17 @@
 type Query {
   getCharacters: [Character]
+  getCharacter(_id: ID!): Character
+}
+
+type Mutation {
+  addCharacter(character: NewCharacterInput!): String!
+}
+
+input NewCharacterInput {
+  name: String!
+  race: Race!
+  genre: Genre!
+  games: [String!]!
 }
 
 type Game {
@@ -19,6 +31,7 @@ enum Race {
   HYLIAN
   GERUDO
   FAIRY
+  MONSTER
 }
 
 enum Genre {
