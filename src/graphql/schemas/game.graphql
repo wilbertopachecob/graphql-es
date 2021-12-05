@@ -1,8 +1,8 @@
 type Query {
-    gameHello: String
+  gameHello: String
 }
 
 type Game {
-    id: ID,
-    name: String
+  _id: ID
+  name: String
 }
