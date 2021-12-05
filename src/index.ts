@@ -21,6 +21,8 @@ async function startApolloServer() {
 
 startApolloServer();
 
+console.log(process.env.NODE_ENV);
+
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
 });
