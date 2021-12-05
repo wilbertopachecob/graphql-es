@@ -1,8 +1,9 @@
 import { IResolvers } from "@graphql-tools/utils";
+import data from "../../data/data.json";
 
 const gameResolver: IResolvers = {
   Query: {
-    gameHello: () => "hello game",
+    getGames: () => data.games,
   },
 };
 
