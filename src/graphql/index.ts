@@ -1,10 +1,10 @@
 import { GraphQLSchema } from "graphql";
 import "graphql-import-node";
 import resolvers from "./resolvers";
-import { mergeSchemas } from "@graphql-tools/schema";
-import schemas from "./schemas";
+import schema from "./schemas";
+import { addResolversToSchema } from "@graphql-tools/schema";
 
-export const schema: GraphQLSchema = mergeSchemas({
-  schemas,
+export const schemaWithResolvers: GraphQLSchema = addResolversToSchema({
+  schema,
   resolvers,
 });
