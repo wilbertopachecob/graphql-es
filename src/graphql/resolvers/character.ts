@@ -1,10 +1,11 @@
 import { IResolvers } from "@graphql-tools/utils";
 import { ObjectId } from "mongodb";
 import { Db } from "mongodb";
+import { ICharacter } from "../../interfaces/ICharacter";
 
 const characterResolver: IResolvers = {
   Query: {
-    async getCharacters(parent: void, args: any, context: Db) {
+    async getCharacters(parent: void, args: void, context: Db) {
       try {
         const characters = await context
           .collection("characters")
@@ -15,11 +16,15 @@ const characterResolver: IResolvers = {
         console.log(error);
       }
     },
-    getCharacter: async (parent: void, args: any, context: Db) => {
+    getCharacter: async (
+      parent: void,
+      { _id }: { _id: string },
+      context: Db
+    ) => {
       try {
         const character = await context
           .collection("characters")
-          .findOne({ _id: new ObjectId(args._id) });
+          .findOne({ _id: new ObjectId(_id) });
         return character;
       } catch (error) {
         console.log(error);
@@ -27,7 +32,11 @@ const characterResolver: IResolvers = {
     },
   },
   Mutation: {
-    async addCharacter(parent: void, { character }: any, context: Db) {
+    async addCharacter(
+      parent: void,
+      { character }: { character: Omit<ICharacter, "_id"> },
+      context: Db
+    ) {
       try {
         await context.collection("characters").insertOne(character);
         return "The character was successfuly added";
@@ -36,7 +45,11 @@ const characterResolver: IResolvers = {
         return "Error inserting character in the Database";
       }
     },
-    async editCharacter(parent: void, { character, _id }: any, context: Db) {
+    async editCharacter(
+      parent: void,
+      { character, _id }: { character: ICharacter; _id: string },
+      context: Db
+    ) {
       try {
         await context
           .collection("characters")
@@ -49,7 +62,7 @@ const characterResolver: IResolvers = {
     },
   },
   Character: {
-    games: async (parent: any, args: any, context: Db) => {
+    games: async (parent: ICharacter, args: void, context: Db) => {
       try {
         const games = await context
           .collection("games")
