@@ -1,5 +1,6 @@
 import character from "./character.graphql";
 import game from "./game.graphql";
+import developer from "./developer.graphql";
 
 import { makeExecutableSchema } from "graphql-tools";
 import { DocumentNode, GraphQLSchema } from "graphql";
@@ -12,6 +13,6 @@ function generateSchemas(schemas: Array<DocumentNode>): Array<GraphQLSchema> {
   );
 }
 
-const schemes = generateSchemas([character, game]);
+const schemes = generateSchemas([character, game, developer]);
 
 export default schemes;
