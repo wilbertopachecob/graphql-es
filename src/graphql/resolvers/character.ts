@@ -2,6 +2,7 @@ import { IResolvers } from "@graphql-tools/utils";
 import { ObjectId } from "mongodb";
 import { Db } from "mongodb";
 import { ICharacter } from "../../interfaces/ICharacter";
+import { isNull, isString } from "lodash";
 
 const characterResolver: IResolvers = {
   Query: {
@@ -38,11 +39,19 @@ const characterResolver: IResolvers = {
       context: Db
     ) {
       try {
-        await context.collection("characters").insertOne(character);
-        return "The character was successfuly added";
-      } catch (error) {
+        const exist = await context.collection("characters").findOne({name: character.name});
+        if (!isNull(exist)) {
+          await context.collection("characters").insertOne(character);
+          return "The character was successfuly added";  
+        }
+        throw new Error("The character already exists");
+      } catch (error: any) {
         console.log(error);
-        return "Error inserting character in the Database";
+        let msg = "Error inserting character in the Database";
+        if (error.message && isString(error.message)) {
+          msg = error.message;
+        }
+        return msg;
       }
     },
     async editCharacter(
@@ -55,9 +64,13 @@ const characterResolver: IResolvers = {
           .collection("characters")
           .updateOne({ _id: new ObjectId(_id) }, { $set: character });
         return "The character was successfuly added";
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
-        return "Error inserting character in the Database";
+        let msg = "Error editing character in the Database";
+        if (error.message && isString(error.message)) {
+          msg = error.message;
+        }
+        return msg;
       }
     },
   },
