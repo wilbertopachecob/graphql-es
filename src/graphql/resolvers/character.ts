@@ -7,7 +7,10 @@ const characterResolver: IResolvers = {
   Query: {
     async getCharacters(parent: void, args: any, context: Db) {
       try {
-        const characters = await context.collection('characters').find().toArray(); 
+        const characters = await context
+          .collection("characters")
+          .find()
+          .toArray();
         return characters;
       } catch (error) {
         console.log(error);
@@ -15,21 +18,23 @@ const characterResolver: IResolvers = {
     },
     getCharacter: async (parent: void, args: any, context: Db) => {
       try {
-        const character = await context.collection('characters').findOne({"_id" : new ObjectId(args._id)})
+        const character = await context
+          .collection("characters")
+          .findOne({ _id: new ObjectId(args._id) });
         return character;
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   },
   Mutation: {
     async addCharacter(parent: void, { character }: any, context: Db) {
       try {
-        await context.collection('characters').insertOne(character);  
+        await context.collection("characters").insertOne(character);
         return "The character was successfuly added";
       } catch (error) {
         console.log(error);
-        return 'Error inserting character in the Database' 
+        return "Error inserting character in the Database";
       }
     },
   },
