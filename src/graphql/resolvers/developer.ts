@@ -1,7 +1,7 @@
 import { IResolvers } from "@graphql-tools/utils";
 import { Db } from "mongodb";
-import { IDeveloper } from '../../interfaces/IDeveloper';
-import { isNull, isString } from 'lodash';
+import { IDeveloper } from "../../interfaces/IDeveloper";
+import { isNull, isString } from "lodash";
 
 const developerResolver: IResolvers = {
   Query: {
@@ -18,9 +18,15 @@ const developerResolver: IResolvers = {
     },
   },
   Mutation: {
-    addDeveloper: async (parent: any, {developer}: {developer: Omit<IDeveloper, "_id">}, context: Db) => {
+    addDeveloper: async (
+      parent: any,
+      { developer }: { developer: Omit<IDeveloper, "_id"> },
+      context: Db
+    ) => {
       try {
-        const exist = await context.collection("characters").findOne({name: developer.name});
+        const exist = await context
+          .collection("characters")
+          .findOne({ name: developer.name });
         if (!isNull(exist)) {
           await context.collection("developers").insertOne(developer);
           return "Developer added successfully";
