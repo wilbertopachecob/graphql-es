@@ -5,4 +5,14 @@ type Query {
 type Game {
   _id: ID
   title: String
+  developers: [Developer]
+}
+
+type Mutation {
+  addGame(game: NewGameInput): String!
+}
+
+input NewGameInput {
+  title: String!
+  developers: [Developer!]!
 }
