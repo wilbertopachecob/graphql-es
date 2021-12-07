@@ -15,11 +15,6 @@ input NewCharacterInput {
   image: String!
 }
 
-type Game {
-  _id: ID
-  name: String
-}
-
 type Character {
   _id: ID
   name: String
