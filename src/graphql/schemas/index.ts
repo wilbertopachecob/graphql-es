@@ -1,8 +1,9 @@
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { join } from "path";
+import { GraphQLSchema } from "graphql";
 
-const schema = loadSchemaSync(
+const schema: GraphQLSchema = loadSchemaSync(
   [
     join(__dirname, "game.graphql"),
     join(__dirname, "character.graphql"),
