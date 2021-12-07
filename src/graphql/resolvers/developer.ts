@@ -19,7 +19,7 @@ const developerResolver: IResolvers = {
     addDeveloper: async (parent: any, args: any, context: Db) => {
       try {
         await context.collection("developers").insertOne(args.developer);
-        return "Developer added successfuly";
+        return "Developer added successfully";
       } catch (error) {
         console.log(error);
         return "Error creating developer";
