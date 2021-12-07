@@ -1,16 +1,16 @@
 type Query {
-    getDevelopers: [Developer]
+  getDevelopers: [Developer]
 }
 
 type Mutation {
-    addDeveloper(developer: NewDeveloperInput): String!
+  addDeveloper(developer: NewDeveloperInput!): String!
 }
 
 input NewDeveloperInput {
-    name: String!
+  name: String!
 }
 
 type Developer {
-    _id: String
-    name: String
+  _id: String
+  name: String
 }
