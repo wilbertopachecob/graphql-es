@@ -1,7 +1,6 @@
 import { IResolvers } from "@graphql-tools/utils";
 import { ObjectId } from "mongodb";
 import { Db } from "mongodb";
-import data from "../../data/data.json";
 
 const characterResolver: IResolvers = {
   Query: {
@@ -37,12 +36,34 @@ const characterResolver: IResolvers = {
         return "Error inserting character in the Database";
       }
     },
+    async editCharacter(parent: void, { character, _id }: any, context: Db) {
+      try {
+        await context
+          .collection("characters")
+          .updateOne({ _id: new ObjectId(_id) }, { $set: character });
+        return "The character was successfuly added";
+      } catch (error) {
+        console.log(error);
+        return "Error inserting character in the Database";
+      }
+    },
   },
   Character: {
-    games: (parent: any) =>
-      data.games.filter(({ _id }: { _id: string }) =>
-        parent.games.includes(_id)
-      ),
+    games: async (parent: any, args: any, context: Db) => {
+      try {
+        const games = await context
+          .collection("games")
+          .find({
+            _id: {
+              $in: parent.games.map((_id: string) => new ObjectId(_id)),
+            },
+          })
+          .toArray();
+        return games;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 
