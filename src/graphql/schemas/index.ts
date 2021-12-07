@@ -1,18 +1,14 @@
-import character from "./character.graphql";
-import game from "./game.graphql";
-import developer from "./developer.graphql";
+import { loadSchemaSync } from "@graphql-tools/load";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { join } from "path";
 
-import { makeExecutableSchema } from "graphql-tools";
-import { DocumentNode, GraphQLSchema } from "graphql";
+const schema = loadSchemaSync(
+  [
+    join(__dirname, "game.graphql"),
+    join(__dirname, "character.graphql"),
+    join(__dirname, "developer.graphql"),
+  ],
+  { loaders: [new GraphQLFileLoader()] }
+);
 
-function generateSchemas(schemas: Array<DocumentNode>): Array<GraphQLSchema> {
-  return schemas.map((schema) =>
-    makeExecutableSchema({
-      typeDefs: schema,
-    })
-  );
-}
-
-const schemes = generateSchemas([character, game, developer]);
-
-export default schemes;
+export default schema;
