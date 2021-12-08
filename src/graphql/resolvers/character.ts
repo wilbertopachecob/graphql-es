@@ -27,8 +27,13 @@ const characterResolver: IResolvers = {
           .collection("characters")
           .findOne({ _id: new ObjectId(_id) });
         return character;
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        console.error(error);
+        let e = {
+          message: error.message || 'Error getting character from database',
+          stack: error.stack || ''
+        }
+        return e;
       }
     },
   },
@@ -39,10 +44,12 @@ const characterResolver: IResolvers = {
       context: Db
     ) {
       try {
-        const exist = await context.collection("characters").findOne({name: character.name});
+        const exist = await context
+          .collection("characters")
+          .findOne({ name: character.name });
         if (!isNull(exist)) {
           await context.collection("characters").insertOne(character);
-          return "The character was successfuly added";  
+          return "The character was successfuly added";
         }
         throw new Error("The character already exists");
       } catch (error: any) {
@@ -89,6 +96,11 @@ const characterResolver: IResolvers = {
       } catch (error) {
         console.error(error);
       }
+    },
+  },
+  GetCharacterResponse: {
+    __resolveType(obj: any) {
+      return obj._id ? "Character" : "Error";
     },
   },
 };

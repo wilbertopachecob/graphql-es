@@ -1,7 +1,9 @@
 type Query {
   getCharacters: [Character]
-  getCharacter(_id: ID!): Character
+  getCharacter(_id: ID!): GetCharacterResponse
 }
+
+union GetCharacterResponse = Character | Error 
 
 type Mutation {
   addCharacter(character: NewCharacterInput!): String!
