@@ -8,6 +8,7 @@ const schema: GraphQLSchema = loadSchemaSync(
     join(__dirname, "game.graphql"),
     join(__dirname, "character.graphql"),
     join(__dirname, "developer.graphql"),
+    join(__dirname, "error.graphql"),
   ],
   { loaders: [new GraphQLFileLoader()] }
 );
