@@ -1,6 +1,12 @@
 type Query {
-  getGames: [Game]
+  getGames: GetGamesResponse
 }
+
+type GetGamesSuccess {
+  games: [Game]
+}
+
+union GetGamesResponse = GetGamesSuccess | Error
 
 type Game {
   _id: ID
@@ -9,8 +15,10 @@ type Game {
 }
 
 type Mutation {
-  addGame(game: NewGameInput!): String!
+  addGame(game: NewGameInput!): AddGameResponse
 }
+
+union AddGameResponse = SimpleResponse | Error 
 
 input NewGameInput {
   title: String!
