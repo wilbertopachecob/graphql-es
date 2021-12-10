@@ -1,16 +1,21 @@
-import { loadSchemaSync } from "@graphql-tools/load";
+import {
+  loadSchemaSync,
+  UnnormalizedTypeDefPointer,
+} from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { join } from "path";
 import { GraphQLSchema } from "graphql";
 
-const schemas = ["game", "character", "developer", "error", "simpleResponse"];
+const schemaNames = ["game", "character", "developer", "error", "simpleResponse"];
 
-function createUnnormalizedTypeDefPointerArray(schemas: Array<string>) {
+function createUnnormalizedTypeDefPointerArray(
+  schemas: Array<string>
+): UnnormalizedTypeDefPointer[] {
   return schemas.map((schemaName) => join(__dirname, `${schemaName}.graphql`));
 }
 
 const schema: GraphQLSchema = loadSchemaSync(
-  createUnnormalizedTypeDefPointerArray(schemas),
+  createUnnormalizedTypeDefPointerArray(schemaNames),
   { loaders: [new GraphQLFileLoader()] }
 );
 
