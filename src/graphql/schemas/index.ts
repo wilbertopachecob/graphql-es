@@ -3,13 +3,14 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { join } from "path";
 import { GraphQLSchema } from "graphql";
 
+const schemas = ["game", "character", "developer", "error", "simpleResponse"];
+
+function createUnnormalizedTypeDefPointerArray(schemas: Array<string>) {
+  return schemas.map((schemaName) => join(__dirname, `${schemaName}.graphql`));
+}
+
 const schema: GraphQLSchema = loadSchemaSync(
-  [
-    join(__dirname, "game.graphql"),
-    join(__dirname, "character.graphql"),
-    join(__dirname, "developer.graphql"),
-    join(__dirname, "error.graphql"),
-  ],
+  createUnnormalizedTypeDefPointerArray(schemas),
   { loaders: [new GraphQLFileLoader()] }
 );
 
