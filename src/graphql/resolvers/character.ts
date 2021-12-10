@@ -3,13 +3,14 @@ import { ObjectId } from "mongodb";
 import { Db } from "mongodb";
 import { ICharacter } from "../../interfaces/ICharacter";
 import { isNull, isString } from "lodash";
+import { COLLECTION_NAMES } from "../../database/collectionNames";
 
 const characterResolver: IResolvers = {
   Query: {
     async getCharacters(parent: void, args: void, context: Db) {
       try {
         const characters = await context
-          .collection("characters")
+          .collection(COLLECTION_NAMES.CHARACTERS)
           .find()
           .toArray();
         return characters;
@@ -24,7 +25,7 @@ const characterResolver: IResolvers = {
     ) => {
       try {
         const character = await context
-          .collection("characters")
+          .collection(COLLECTION_NAMES.CHARACTERS)
           .findOne({ _id: new ObjectId(_id) });
         return character;
       } catch (error: any) {
@@ -45,10 +46,10 @@ const characterResolver: IResolvers = {
     ) {
       try {
         const exist = await context
-          .collection("characters")
+          .collection(COLLECTION_NAMES.CHARACTERS)
           .findOne({ name: character.name });
         if (!isNull(exist)) {
-          await context.collection("characters").insertOne(character);
+          await context.collection(COLLECTION_NAMES.CHARACTERS).insertOne(character);
           return "The character was successfuly added";
         }
         throw new Error("The character already exists");
@@ -68,7 +69,7 @@ const characterResolver: IResolvers = {
     ) {
       try {
         await context
-          .collection("characters")
+          .collection(COLLECTION_NAMES.CHARACTERS)
           .updateOne({ _id: new ObjectId(_id) }, { $set: character });
         return "The character was successfuly added";
       } catch (error: any) {
@@ -85,7 +86,7 @@ const characterResolver: IResolvers = {
     games: async (parent: ICharacter, args: void, context: Db) => {
       try {
         const games = await context
-          .collection("games")
+          .collection(COLLECTION_NAMES.GAMES)
           .find({
             _id: {
               $in: parent.games.map((_id: string) => new ObjectId(_id)),
