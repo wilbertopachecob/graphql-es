@@ -1,10 +1,18 @@
 type Query {
-  getDevelopers: [Developer]
+  getDevelopers: GetDevelopersResponse
 }
 
+type GetDevelopersSuccess {
+  developers: [Developer]
+} 
+
+union GetDevelopersResponse = GetDevelopersSuccess | Error
+
 type Mutation {
-  addDeveloper(developer: NewDeveloperInput!): String!
+  addDeveloper(developer: NewDeveloperInput!): AddDeveloperResponse
 }
+
+union AddDeveloperResponse = SimpleResponse | Error
 
 input NewDeveloperInput {
   name: String!

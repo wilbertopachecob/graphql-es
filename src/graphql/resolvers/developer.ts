@@ -1,7 +1,7 @@
 import { IResolvers } from "@graphql-tools/utils";
 import { Db } from "mongodb";
 import { IDeveloper } from "../../interfaces/IDeveloper";
-import { isNull, isString } from "lodash";
+import { has, isNull, isString } from "lodash";
 import { COLLECTION_NAMES } from "../../database/collectionNames";
 
 const developerResolver: IResolvers = {
@@ -12,9 +12,14 @@ const developerResolver: IResolvers = {
           .collection(COLLECTION_NAMES.DEVELOPERS)
           .find()
           .toArray();
-        return developers;
-      } catch (error) {
+        return { developers };
+      } catch (error: any) {
         console.log(error);
+        let e = {
+          message: error.message || "Error inserting game into database",
+          stack: error.stack || "",
+        };
+        return e;
       }
     },
   },
@@ -29,7 +34,9 @@ const developerResolver: IResolvers = {
           .collection(COLLECTION_NAMES.DEVELOPERS)
           .findOne({ name: developer.name });
         if (isNull(exist)) {
-          await context.collection(COLLECTION_NAMES.DEVELOPERS).insertOne(developer);
+          await context
+            .collection(COLLECTION_NAMES.DEVELOPERS)
+            .insertOne(developer);
           return "Developer added successfully";
         }
         throw new Error("The developer already exists");
@@ -43,6 +50,16 @@ const developerResolver: IResolvers = {
       }
     },
   },
+  GetDevelopersResponse: {
+    __resolveType(obj: any) {
+      return obj.developers ? "GetDevelopersSuccess" : "Error";
+    },
+  },
+  AddDeveloperResponse: {
+    __resolveType(obj: any) {
+      return !has(obj, 'stack') ? "SimpleResponse" : "Error";
+    },
+  }
 };
 
 export default developerResolver;
